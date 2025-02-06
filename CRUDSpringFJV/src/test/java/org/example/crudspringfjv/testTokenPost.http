@@ -1,0 +1,17 @@
+# @no-redirect
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+  "username": "nuevoUsuario",
+  "password": "contraseña123"
+}
+###
+# @no-redirect
+POST http://localhost:8080/auth/token
+Content-Type: application/json
+
+{
+  "username": "nuevoUsuario",
+  "password": "contraseña123"
+}
