@@ -11,7 +11,7 @@ public class ConfigurationFilter {
     public FilterRegistrationBean<FiltroLogin> headerValidatorFilter() {
         FilterRegistrationBean<FiltroLogin> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new FiltroLogin());
-        registrationBean.addUrlPatterns("/l");
+        registrationBean.addUrlPatterns("/*");
         return registrationBean;
     }
 }

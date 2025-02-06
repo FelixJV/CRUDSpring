@@ -18,15 +18,17 @@ public class FiltroLogin extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        if (request.getSession().getAttribute("USER") != null) {
-            response.sendRedirect("/playlist");
-            return;
+        if (request.getSession().getAttribute("USER") == null) {
+            response.sendRedirect("/login");
+        } else {
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return "/login".equals(request.getRequestURI());
+        String path = request.getRequestURI();
+        return "/login".equals(request.getRequestURI())
+                || path.startsWith("/verificar");
     }
 }

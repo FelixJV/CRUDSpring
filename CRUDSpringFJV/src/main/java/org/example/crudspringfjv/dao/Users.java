@@ -2,48 +2,34 @@ package org.example.crudspringfjv.dao;
 
 import lombok.Data;
 import org.example.crudspringfjv.domain.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@Repository
 public class Users {
-    private List<User> users;
-    private int contador;
+    private final List<User> users = new ArrayList<>();
 
-    public Users() {
-        users = new ArrayList<>();
-        users.add(new User(1, "Admin", "admin123", true));
-        users.add(new User(2, "JohnDoe", "password", false));
-        users.add(new User(3, "JaneDoe", "123456", false));
-        users.add(new User(4, "Oscar", "clave", false));
-        users.add(new User(5, "Maria", "securepass", false));
-        contador = users.size() + 1;
+
+    public boolean add(User user) {
+        if (users.stream().anyMatch(usr ->
+                usr.getNombre().equals(user.getNombre()) || usr.getEmail().equals(user.getEmail())))
+            return false;
+
+
+        return users.add(user);
     }
 
-    public List<User> obtenerUsuarios() {
-        return users;
-    }
-    public User obtenerUsuarioEspecial(String nombre, String password){
-        User user = users.stream().filter(userr -> userr.getNombre().equals(nombre)&&userr.getPassword().equals(password)).findFirst().get();
-        return user;
-    }
-
-    public void agregarUsuario(User nuevoUsuario) {
-        nuevoUsuario.setId(contador);
-        contador++;
-        users.add(nuevoUsuario);
+    public void verificar(String codigo) {
+        users.stream()
+                .filter(usr -> usr.getCodigo().equals(codigo))
+                .findFirst()
+                .ifPresent(usr -> usr.setVerificado(true));
     }
 
-    public void eliminarUsuario(int id) {
-        users.removeIf(user -> user.getId() == id);
-    }
-
-    public void update(User userUpdated) {
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getId() == userUpdated.getId()) {
-                users.set(i, userUpdated);
-            }
-        }
+    public List<User> getAll() {
+        return new ArrayList<>(users);
     }
 }

@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
-@RequestMapping("/playlist")
 public class PlaylistController {
 
     private final PlaylistService playlistService;
@@ -22,8 +23,9 @@ public class PlaylistController {
 
     @GetMapping("/playlist")
     public String getPlaylist(Model model) {
-        model.addAttribute("pl", playlistService.getAll());
-        return "playlist";
+        List<Cancion> pl = playlistService.getAll();
+        model.addAttribute(Constantes.PL_ATR, pl);
+        return Constantes.PLAYLIST_VIEW;
     }
     @PostMapping("/playlist")
     public String managePlaylist(@RequestParam String action,
@@ -37,6 +39,6 @@ public class PlaylistController {
         } else if (Constantes.ACTION_UPDATE.equals(action) && id != null) {
             playlistService.update(new Cancion(id, titulo, artista));
         }
-        return Constantes.PLAYLIST_VIEW;
+        return "redirect:"+Constantes.PLAYLIST_VIEW;
     }
 }
